@@ -1,0 +1,55 @@
+{
+  "name": "kypher-mini",
+  "version": "1.0.0",
+  "description": "A floating 3D desktop companion with focus timer, treats, and cozy check-ins.",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "npm run assets",
+    "assets": "node scripts/generate-assets.js && node scripts/download-font.js",
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "desktop-pet",
+    "pomodoro",
+    "threejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "electron-store": "^8.2.0",
+    "pngjs": "^7.0.0",
+    "three": "^0.167.1"
+  },
+  "devDependencies": {
+    "electron": "^31.3.1",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.kypher.mini",
+    "productName": "Kypher Mini",
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "renderer.js",
+      "styles.css",
+      "assets/**/*",
+      "fonts/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

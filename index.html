@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kypher Mini</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./node_modules/three/build/three.module.js",
+          "three/addons/": "./node_modules/three/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="stage" aria-label="Kypher Mini desktop pet">
+      <section id="debugPanel" class="debug-panel" hidden></section>
+      <section id="bubble" class="bubble" hidden>
+        <span id="bubbleText"></span>
+      </section>
+
+      <section id="focusPanel" class="focus-panel" hidden>
+        <div class="focus-title">Focus</div>
+        <div id="focusTime" class="focus-time">25:00</div>
+        <div class="focus-track"><span id="focusFill"></span></div>
+      </section>
+
+      <div id="treatLayer"></div>
+      <div id="heartLayer"></div>
+      <div id="zzzLayer"></div>
+
+      <section id="pet" aria-label="3D pet">
+        <canvas id="petCanvas"></canvas>
+      </section>
+    </main>
+    <script type="module" src="./renderer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,253 @@
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("./fonts/SpaceGrotesk.ttf") format("truetype");
+  font-weight: 100 900;
+}
+
+:root {
+  --character-height: 150px;
+  --bubble-width: 280px;
+  --bubble-align: center;
+  --glass: rgba(12, 18, 28, 0.48);
+  --glass-border: rgba(160, 235, 255, 0.34);
+  --text: rgba(244, 250, 255, 0.94);
+  --mint: #65ffd6;
+  --rose: #ff7ab6;
+  --gold: #ffd66b;
+}
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+#pet {
+  position: absolute;
+  left: 80px;
+  bottom: 6px;
+  width: calc(var(--character-height) * 1.08);
+  height: var(--character-height);
+  transform-origin: 50% 100%;
+  cursor: grab;
+  filter: drop-shadow(0 22px 18px rgba(0, 0, 0, 0.34));
+  animation: walkBob 1.2s ease-in-out infinite;
+  pointer-events: auto;
+}
+
+#pet.dragging {
+  cursor: grabbing;
+  animation: dragDangle 0.42s ease-in-out infinite alternate;
+}
+
+#pet.focus {
+  animation: focusBob 2.4s ease-in-out infinite;
+  filter:
+    drop-shadow(0 0 16px rgba(101, 255, 214, 0.62))
+    drop-shadow(0 22px 18px rgba(0, 0, 0, 0.34));
+}
+
+#pet.sleep {
+  animation: sleepBreath 2.8s ease-in-out infinite;
+  filter:
+    drop-shadow(0 0 12px rgba(255, 214, 107, 0.42))
+    drop-shadow(0 22px 18px rgba(0, 0, 0, 0.34));
+}
+
+#pet.perch {
+  animation: perchWatch 3.4s ease-in-out infinite;
+  filter:
+    drop-shadow(0 0 16px rgba(255, 214, 107, 0.32))
+    drop-shadow(0 22px 18px rgba(0, 0, 0, 0.34));
+}
+
+#petCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: transparent;
+}
+
+.bubble,
+.focus-panel,
+.debug-panel {
+  position: absolute;
+  left: 80px;
+  bottom: 168px;
+  width: var(--bubble-width);
+  color: var(--text);
+  text-align: var(--bubble-align);
+  border: 1px solid var(--glass-border);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)),
+    var(--glass);
+  backdrop-filter: blur(16px) saturate(1.35);
+  border-radius: 18px;
+  box-shadow:
+    0 0 24px rgba(101, 255, 214, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+}
+
+.debug-panel {
+  left: 18px;
+  bottom: 18px;
+  width: 420px;
+  padding: 14px 16px;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+  border-color: rgba(255, 122, 182, 0.55);
+  white-space: pre-wrap;
+}
+
+.bubble {
+  min-height: 74px;
+  padding: 17px 20px;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 42px;
+  bottom: -10px;
+  width: 18px;
+  height: 18px;
+  transform: rotate(45deg);
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(12, 18, 28, 0.46);
+}
+
+.focus-panel {
+  width: 236px;
+  padding: 14px 16px 16px;
+  border-color: rgba(101, 255, 214, 0.54);
+  animation: focusGlow 1.6s ease-in-out infinite alternate;
+}
+
+.focus-title {
+  color: var(--mint);
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.focus-time {
+  margin-top: 2px;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.focus-track {
+  height: 7px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.focus-track span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--mint), var(--rose), var(--gold));
+}
+
+.treat,
+.heart,
+.zzz,
+.signal {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.treat {
+  width: 36px;
+  height: 36px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.28));
+}
+
+.heart,
+.zzz,
+.signal {
+  color: var(--rose);
+  font-weight: 900;
+  text-shadow: 0 0 14px currentColor;
+  animation: floatUp 1.3s ease-out forwards;
+}
+
+.zzz {
+  color: var(--gold);
+  font-size: 22px;
+  animation-duration: 2.2s;
+}
+
+.signal {
+  color: var(--mint);
+  font-size: 20px;
+  animation: signalBurst 1.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes walkBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1.2deg); }
+}
+
+@keyframes dragDangle {
+  from { transform: translateY(-8px) rotate(-5deg) scaleY(1.04); }
+  to { transform: translateY(2px) rotate(5deg) scaleY(0.98); }
+}
+
+@keyframes focusBob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.015); }
+}
+
+@keyframes perchWatch {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-4px) rotate(1deg); }
+}
+
+@keyframes sleepBreath {
+  0%, 100% { transform: translateY(4px) scale(1, 0.96) rotate(-4deg); }
+  50% { transform: translateY(0) scale(1.02, 1) rotate(-4deg); }
+}
+
+@keyframes focusGlow {
+  from { box-shadow: 0 0 18px rgba(101, 255, 214, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.18); }
+  to { box-shadow: 0 0 34px rgba(255, 122, 182, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.24); }
+}
+
+@keyframes floatUp {
+  from { opacity: 1; transform: translateY(0) scale(0.82); }
+  to { opacity: 0; transform: translateY(-76px) scale(1.32); }
+}
+
+@keyframes signalBurst {
+  from { opacity: 0; transform: translate3d(0, 24px, 0) scale(0.45) rotate(0deg); }
+  18% { opacity: 1; }
+  to { opacity: 0; transform: translate3d(0, -92px, 0) scale(1.55) rotate(24deg); }
+}
